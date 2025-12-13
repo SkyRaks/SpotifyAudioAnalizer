@@ -21,9 +21,9 @@ def get_token():
         "Authorization": "Basic " + client_64,
         "Content-Type": "application/x-www-form-urlencoded"
     }
+
     data = {"grant_type": "client_credentials"}
     response = requests.post(url, headers=headers, data=data)
-    # json_result = json.loads(result.content)
     if response.status_code == 200:
         json_result = json.loads(response.content)
         return json_result["access_token"]
@@ -41,10 +41,16 @@ def get_artist(token, artist_name):
 
     response = requests.get(query_url, headers=headers)
     if response.status_code == 200:
+
         json_response = json.loads(response.content)
+        # pprint(json_response['artists']['items'][0]['genres'][0]) # i found out how to print what i want
         pprint(json_response)
     else:
         print(f"failed to get data, status code: {response.status_code}")
 
 token = get_token()
+
 get_artist(token, "Metallica")
+
+# app should analyze songs by tempo, energy, danceability
+# tech stack: spotipy?, matplotlib, plotly
