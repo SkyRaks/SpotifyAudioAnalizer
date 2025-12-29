@@ -1,11 +1,10 @@
 import json
 from pprint import pprint
 import requests
-from dotenv import load_dotenv
 import os
 import base64
+from dotenv import load_dotenv
 
-# thi sis loads .env stuff
 load_dotenv()
 client_id = os.getenv("client_id")
 client_secret = os.getenv("client_secret")
@@ -18,7 +17,7 @@ search_url = "https://api.spotify.com/v1/search"
 
 # this is getting token required by spotify api
 def get_token():
-    client_string = client_id + ":" + client_secret
+    client_string = f"{client_id}:{client_secret}"
     client_bytes = client_string.encode("utf-8") # all of this is needed to encode stuff
     client_64 = str(base64.b64encode(client_bytes), "utf-8")
 
@@ -31,7 +30,6 @@ def get_token():
     data = {"grant_type": "client_credentials"}
     response = requests.post(url, headers=headers, data=data)
     if response.status_code == 200:
-        # json_result = json.loads(response.content)
         token = response.json()["access_token"]
         return token
     else:
@@ -75,7 +73,7 @@ def get_song_feachures(song_name):
     token = get_token()
     song_id = get_song_id(song_name, token)
 
-    url = rapid_url + song_id
+    url = f"{rapid_url}{song_id}"
     
     headers = {
         "x-rapidapi-key": rapid_api_key,
@@ -94,6 +92,5 @@ def get_song_feachures(song_name):
         return features
     else:
         return response.status_code
-
 
 # pprint(get_song_feachures("Psychosocial"))
